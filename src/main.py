@@ -27,5 +27,4 @@ if __name__ == "__main__":
             url = urls[i]
             os.system("node get_page.js --url {}".format(url))
             shutil.move("desktop.png", "{}/{}.png".format(dst_dir, i))
-        sys.exit(1)
         time.sleep(60)

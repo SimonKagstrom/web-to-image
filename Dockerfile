@@ -2,8 +2,8 @@ FROM balenalib/raspberry-pi-debian:latest
 
 ## See https://jonathanmh.com/taking-full-page-screenshots-headless-chrome/
 
-RUN apt-get update
-RUN apt-get install -y chromium imagemagick nodejs
+RUN apt-get -y update
+RUN apt-get install -y chromium nodejs
 RUN apt-get install -y npm
 
 WORKDIR /usr/app
@@ -16,5 +16,6 @@ RUN npm install minimist chrome-remote-interface
 RUN apt-get autoremove -y
 RUN rm -rf /var/lib/apt/lists/*
 
-## chromium --no-sandbox --headless --hide-scrollbars --remote-debugging-port=9222 --disable-gpu &
-## nodejs other.js
+COPY src/* /app/
+
+CMD /app/script.sh ${DST_DIR} "${URLS}"
