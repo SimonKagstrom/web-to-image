@@ -22,9 +22,17 @@ if __name__ == "__main__":
         pass
     print(urls)
 
+    # The first seems to be broken for some reason...
+    for i in range(0, len(urls)):
+        url = urls[i]
+        os.system("node get_page.js --url {}".format(url))
+
     while True:
         for i in range(0, len(urls)):
             url = urls[i]
             os.system("node get_page.js --url {}".format(url))
-            shutil.move("desktop.png", "{}/{}.png".format(dst_dir, i))
+            try:
+                shutil.move("/tmp/desktop.png", "{}/{}.png".format(dst_dir, i))
+            except:
+                print("Can't move image {}".format(i))
         time.sleep(60)

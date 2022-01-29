@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const targetURL = argv.url || 'http://192.168.1.164:8123/lovelace/home';
 const viewport = [800,536];
-const screenshotDelay = 10000; // ms
+const screenshotDelay = 20000; // ms
 const fullPage = argv.fullPage || false;
 
 if(fullPage){
@@ -54,14 +54,15 @@ CDP(async function(client){
   setTimeout(async function() {
     const screenshot = await Page.captureScreenshot({format: "png", fromSurface: true});
     const buffer = new Buffer.from(screenshot.data, 'base64');
-    fs.writeFile('desktop.png', buffer, 'base64', function(err) {
+    fs.writeFile('/tmp/desktop.png', buffer, 'base64', function(err) {
       if (err) {
         console.error(err);
       } else {
         console.log('Screenshot saved');
       }
     });
-      client.close();
+    await Page.navigate({url: "http://www.google.com"});
+    client.close();
   }, screenshotDelay);
 
 }).on('error', err => {
