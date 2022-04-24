@@ -36,9 +36,9 @@ if __name__ == "__main__":
             if len(parts) < 1:
                 print("Invalid URL {}".format(cur))
                 continue
-            url = cur[0]
+            url = parts[0]
             extraArgs = ""
-            if len(parts > 1):
+            if len(parts) > 1:
                 extraArgs = "--click {}".format(parts[1])
 
             os.system("node get_page.js --url {} {}".format(url, extraArgs))
