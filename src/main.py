@@ -29,8 +29,19 @@ if __name__ == "__main__":
 
     while True:
         for i in range(0, len(urls)):
-            url = urls[i]
-            os.system("node get_page.js --url {}".format(url))
+            cur = urls[i]
+
+            # http://127.0.0.1:8123/lovelace/home@5,9  where 5,9 is x and y coordinates
+            parts = cur.split('@')
+            if len(parts) < 1:
+                print("Invalid URL {}".format(cur))
+                continue
+            url = cur[0]
+            extraArgs = ""
+            if len(parts > 1):
+                extraArgs = "--click {}".format(parts[1])
+
+            os.system("node get_page.js --url {} {}".format(url, extraArgs))
             try:
                 shutil.move("/tmp/desktop.png", "{}/{}.png".format(dst_dir, i))
             except:

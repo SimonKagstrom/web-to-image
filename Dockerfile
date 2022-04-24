@@ -3,6 +3,7 @@ FROM balenalib/raspberry-pi-debian:latest
 ## See https://jonathanmh.com/taking-full-page-screenshots-headless-chrome/
 
 RUN apt-get -y update
+RUN apt-get install -y libpangoft2-1.0-0
 RUN apt-get install -y chromium nodejs
 RUN apt-get install -y npm
 
