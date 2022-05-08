@@ -4,12 +4,15 @@ import sys
 import os
 import shutil
 import time
+import subprocess
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: XXX <dst-dir> <url> [url...]")
         sys.exit(1)
 
+    child = subprocess.Popen(["chromium", "--no-sandbox", "--headless", "--hide-scrollbars", "--remote-debugging-port=9222", "--disable-gpu", "--unhandled-rejections=none"],
+        close_fds=True)
     dst_dir = sys.argv[1]
     urls = []
     for cur in sys.argv[2:]:
@@ -20,14 +23,19 @@ if __name__ == "__main__":
         os.mkdir(dst_dir)
     except:
         pass
-    print(urls)
 
+    # Some time for chromium to start
+    time.sleep(5)
     # The first seems to be broken for some reason...
     for i in range(0, len(urls)):
         url = urls[i]
         os.system("node get_page.js --url {}".format(url))
 
     while True:
+        if child.poll() != None:
+            # Chromium died
+            sys.exit(1)
+
         for i in range(0, len(urls)):
             cur = urls[i]
 

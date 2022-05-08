@@ -18,4 +18,4 @@ WORKDIR /app
 #RUN apt-get autoremove -y
 #RUN rm -rf /var/lib/apt/lists/*
 
-CMD /app/script.sh "${DST_DIR}" "${URLS}"
+CMD python3 /app/main.py "${DST_DIR}" "${URLS}"
