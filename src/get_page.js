@@ -3,6 +3,7 @@
 const CDP = require('chrome-remote-interface');
 const argv = require('minimist')(process.argv.slice(2));
 const fs = require('fs');
+const { exit } = require('process');
 
 const targetURL = argv.url || 'http://192.168.1.164:8123/lovelace/home';
 const clickCoordinates = argv.click || '';
