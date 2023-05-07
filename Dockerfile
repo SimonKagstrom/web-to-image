@@ -1,20 +1,18 @@
-FROM balenalib/raspberry-pi-debian:latest
+FROM balenalib/raspberry-pi-debian:bookworm
 
 ## See https://jonathanmh.com/taking-full-page-screenshots-headless-chrome/
 
+RUN rm -rf /var/lib/apt/lists/*
 RUN apt-get -y update
-RUN apt-get install -y libpangoft2-1.0-0
-RUN apt-get install -y chromium nodejs
-RUN apt-get install -y npm
+RUN apt-get install -y git chromium libpangoft2-1.0-0 npm zile
+
+RUN apt-get autoremove -y
+RUN rm -rf /var/lib/apt/lists/*
 
 COPY src/* /app/
 
 WORKDIR /app
-RUN npm install
 
-RUN npm install minimist chrome-remote-interface
-
-RUN apt-get autoremove -y
-RUN rm -rf /var/lib/apt/lists/*
+RUN npm install puppeteer
 
 CMD python3 /app/main.py "${DST_DIR}" "${URLS}"

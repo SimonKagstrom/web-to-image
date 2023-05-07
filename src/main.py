@@ -8,10 +8,6 @@ import subprocess
 
 def run(dst_dir : str, urls : str):
 
-    child = subprocess.Popen(["chromium", "--no-sandbox", "--headless", "--hide-scrollbars", "--remote-debugging-port=9222", "--disable-gpu", "--unhandled-rejections=none"],
-        close_fds=True)
-    # Some time for chromium to start
-    time.sleep(5)
     # The first seems to be broken for some reason...
     for i in range(0, len(urls)):
         url = urls[i]
@@ -30,18 +26,11 @@ def run(dst_dir : str, urls : str):
         if len(parts) > 1:
             extraArgs = "--click {}".format(parts[1])
 
-        os.system("node get_page.js --url {} {}".format(url, extraArgs))
+        os.system("node screenshot.js --url {} {}".format(url, extraArgs))
         try:
             shutil.move("/tmp/desktop.png", "{}/{}.png".format(dst_dir, i))
         except:
             print("Can't move image {}".format(i))
-
-    # Stops after a while, so kill it here..
-    child.terminate()
-    child.kill()
-
-    # Only run this in docker!
-#    os.system("pkill chromium")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -58,15 +47,6 @@ if __name__ == "__main__":
         os.mkdir(dst_dir)
     except:
         pass
-
-    child = subprocess.Popen(["chromium", "--no-sandbox", "--headless", "--hide-scrollbars", "--remote-debugging-port=9222", "--disable-gpu", "--unhandled-rejections=none"],
-        close_fds=True)
-    # Some time for chromium to start
-    time.sleep(5)
-    # The first seems to be broken for some reason...
-    for i in range(0, len(urls)):
-        url = urls[i]
-        os.system("node get_page.js --url {}".format(url))
 
     while True:
         run(dst_dir, urls)
